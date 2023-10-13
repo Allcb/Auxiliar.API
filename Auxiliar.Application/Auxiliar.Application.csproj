@@ -7,14 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Auxiliar.Domain.Core\Auxiliar.Domain.Core.csproj" />
     <ProjectReference Include="..\Auxiliar.Infra.CrossCutting.Helpers\Auxiliar.Infra.CrossCutting.Helpers.csproj" />
+    <ProjectReference Include="..\src\Auxiliar.Domain\Auxiliar.Domain.csproj" />
   </ItemGroup>
 
 </Project>
