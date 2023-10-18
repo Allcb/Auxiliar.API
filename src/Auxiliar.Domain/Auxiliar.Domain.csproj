@@ -6,4 +6,9 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Auxiliar.Domain.Core\Auxiliar.Domain.Core.csproj" />
+    <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.Helpers\Auxiliar.Infra.CrossCutting.Helpers.csproj" />
+  </ItemGroup>
+
 </Project>

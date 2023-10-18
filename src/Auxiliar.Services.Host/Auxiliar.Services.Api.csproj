@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -26,9 +26,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Auxiliar.Application\Auxiliar.Application.csproj" />
     <ProjectReference Include="..\..\Auxiliar.Domain.Core\Auxiliar.Domain.Core.csproj" />
     <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.ExceptionHandler\Auxiliar.Infra.CrossCutting.ExceptionHandler.csproj" />
+    <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.IoC\Auxiliar.Infra.CrossCutting.IoC.csproj" />
     <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.Swagger\Auxiliar.Infra.CrossCutting.Swagger.csproj" />
+    <ProjectReference Include="..\Auxiliar.Domain\Auxiliar.Domain.csproj" />
   </ItemGroup>
 
 </Project>
