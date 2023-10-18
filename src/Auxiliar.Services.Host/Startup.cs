@@ -1,6 +1,8 @@
 ﻿using Auxiliar.Configurations;
 using Auxiliar.Domain.Core.Settings;
 using Auxiliar.Domain.Core.Types;
+using Auxiliar.Infra.CrossCutting.ExceptionHandler.Providers;
+using Auxiliar.Infra.CrossCutting.IoC;
 using Auxiliar.Infra.CrossCutting.Swagger.Providers;
 using ElmahCore.Mvc;
 using FluentValidation.AspNetCore;
@@ -9,11 +11,10 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Globalization;
-using Microsoft.IdentityModel.Logging;
-using Auxiliar.Infra.CrossCutting.ExceptionHandler.Providers;
 
 namespace Auxiliar.Services.API
 {
@@ -53,6 +54,8 @@ namespace Auxiliar.Services.API
             //services.AddCustomAzureAdConfiguration();
 
             DefinirCultureInfo();
+
+            services.AddHttpClient();
 
             services.AddControllers(options =>
             {
@@ -151,6 +154,7 @@ namespace Auxiliar.Services.API
         private static void RegisterServices(IServiceCollection services)
         {
             services.AddLogging(loggingBuilder => loggingBuilder.AddConsole());
+            NativeInjectorBootStrapper.RegisterServices(services);
         }
 
         private void RegisterSettings(IServiceCollection services)
