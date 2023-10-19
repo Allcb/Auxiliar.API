@@ -1,7 +1,9 @@
 ﻿using Auxiliar.Application.Interfaces;
 using Auxiliar.Domain.Core.Bus;
+using Auxiliar.Domain.Core.Enum;
 using Auxiliar.Domain.Core.Notifications;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auxiliar.Services.Api.Controllers
@@ -37,6 +39,7 @@ namespace Auxiliar.Services.Api.Controllers
         [HttpPost("Guid")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         [ProducesResponseType(typeof(IEnumerable<Guid>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
         [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError)]
         public IActionResult GerarGuid([FromQuery] int quantidadeGuids)
         {
@@ -48,6 +51,47 @@ namespace Auxiliar.Services.Api.Controllers
             }
 
             return Response(_guids);
+        }
+
+        /// <summary>
+        /// Gerar CPF fake.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("gerar/Cpf")]
+        [ProducesResponseType(typeof(string), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError)]
+        public IActionResult GerarCpf()
+        {
+            return Response(_uteisAppService.GerarCpf());
+        }
+
+        /// <summary>
+        /// Validar Cpf ou Cnpj.
+        /// </summary>
+        /// <param name="documento">Dados do documento</param>
+        /// <param name="tipoDocumento">Selecione o tipo do documento (0 = CPF e 1 = CNPJ) </param>
+        /// <returns></returns>
+        [AllowAnonymous, HttpPost("validar/documento")]
+        [ProducesResponseType(typeof(bool), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError)]
+        public IActionResult Validar(TipoDocumentoEnum tipoDocumento, [FromBody] string documento)
+        {
+            bool _documentoValidado;
+
+            switch (tipoDocumento)
+            {
+                case TipoDocumentoEnum.CPF:
+                    _documentoValidado = _uteisAppService.ValidarCpf(cpf: documento);
+                    break;
+
+                default:
+                    _documentoValidado = _uteisAppService.ValidarCnpj(cnpj: documento);
+                    break;
+            };
+
+            return Response(_documentoValidado);
         }
 
         #endregion POST
