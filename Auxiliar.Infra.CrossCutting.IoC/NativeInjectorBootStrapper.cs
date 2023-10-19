@@ -25,6 +25,12 @@ namespace Auxiliar.Infra.CrossCutting.IoC
 
             #region Scoped
 
+            #region AppServices
+
+            services.AddScoped<IUteisAppService, UteisAppService>();
+
+            #endregion AppServices
+
             #region Domain - Bus (Mediator)
 
             services.AddScoped<IMediatorHandler, InMemoryBus>();
