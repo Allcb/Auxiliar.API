@@ -76,7 +76,7 @@ Se preferir, você também pode executar a aplicação em um contêiner Docker. 
 
 3. Execute o seguinte comando para criar a imagem Docker:
 ```shell
-docker build -t nome-da-imagem .
+docker build -t nome-da-imagem
 docker run -d -p PORTA:PORTA nome-da-imagem
 ```
 
