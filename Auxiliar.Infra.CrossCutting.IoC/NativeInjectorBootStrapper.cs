@@ -4,6 +4,9 @@ using Auxiliar.Domain.Core.Bus;
 using Auxiliar.Domain.Core.Events;
 using Auxiliar.Domain.Core.Notifications;
 using Auxiliar.Infra.CrossCutting.Bus;
+using Auxiliar.Infra.CrossCutting.Chain.Extensions;
+using Auxiliar.Infra.CrossCutting.Chain.Providers.HttpHandlers;
+using Auxiliar.Infra.Data.Context;
 using Auxiliar.Infra.Data.EventSourcing;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +20,29 @@ namespace Auxiliar.Infra.CrossCutting.IoC
 
         public static void RegisterServices(IServiceCollection services)
         {
+            #region Contexts
+
+            services.AddDbContext<EventStoreSQLContext>();
+            services.AddDbContext<AuxiliarContext>();
+
+            #endregion Contexts
+
+            #region Chain
+
+            services.ConfigureChain<HttpResponseHandle>(new StatusOk())
+                    .Next(new StatusAccepted())
+                    .Next(new StatusCreated())
+                    .Next(new StatusNoContent())
+                    .Next(new StatusNotFound())
+                    .Next(new StatusForbidden())
+                    .Next(new StatusBadRequest())
+                    .Next(new StatusUnauthorized())
+                    .Next(new StatusInternalServerError())
+                    .Next(new StatusConflict())
+                    .Next(new DefaultStatus());
+
+            #endregion Chain
+
             #region Singleton
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
