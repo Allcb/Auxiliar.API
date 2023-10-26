@@ -3,11 +3,13 @@ using Auxiliar.Application.Services;
 using Auxiliar.Domain.Core.Bus;
 using Auxiliar.Domain.Core.Events;
 using Auxiliar.Domain.Core.Notifications;
+using Auxiliar.Domain.Interfaces.UoW;
 using Auxiliar.Infra.CrossCutting.Bus;
 using Auxiliar.Infra.CrossCutting.Chain.Extensions;
 using Auxiliar.Infra.CrossCutting.Chain.Providers.HttpHandlers;
 using Auxiliar.Infra.Data.Context;
 using Auxiliar.Infra.Data.EventSourcing;
+using Auxiliar.Infra.Data.UoW;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +24,8 @@ namespace Auxiliar.Infra.CrossCutting.IoC
         {
             #region Contexts
 
-            services.AddDbContext<EventStoreSQLContext>();
             services.AddDbContext<AuxiliarContext>();
+            services.AddDbContext<EventStoreSQLContext>();
 
             #endregion Contexts
 
@@ -75,6 +77,12 @@ namespace Auxiliar.Infra.CrossCutting.IoC
             // services.AddScoped<IEventStoreRepository, EventStoreSQLRepository>();
 
             #endregion Infra - Data EventSourcing
+
+            #region Infra - Data uow
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            #endregion Infra - Data uow
 
             #endregion Scoped
         }

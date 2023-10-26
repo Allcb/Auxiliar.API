@@ -20,11 +20,11 @@ namespace Auxiliar.Infra.Data.Context
 
         #region Construtores Publicos
 
-        protected AuxiliarContext()
+        public AuxiliarContext()
         {
         }
 
-        protected AuxiliarContext(ILoggerFactory loggerFactory)
+        public AuxiliarContext(ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory;
         }

@@ -2,7 +2,7 @@ using Auxiliar.Services.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var startup = new Startup(builder.Configuration, builder.Environment);
+var startup = new Startup(builder.Environment);
 startup.ConfigureServices(builder.Services);
 
 var app = builder.Build();
