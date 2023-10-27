@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Auxiliar.Application\Auxiliar.Application.csproj" />
     <ProjectReference Include="..\Auxiliar.Infra.CrossCutting.Bus\Auxiliar.Infra.CrossCutting.Bus.csproj" />
+    <ProjectReference Include="..\Auxiliar.Infra.CrossCutting.Chain\Auxiliar.Infra.CrossCutting.Chain.csproj" />
     <ProjectReference Include="..\Auxiliar.Infra.Data\Auxiliar.Infra.Data.csproj" />
   </ItemGroup>
 

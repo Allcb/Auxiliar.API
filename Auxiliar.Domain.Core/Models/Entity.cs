@@ -6,6 +6,7 @@
 
         protected Entity()
         {
+            Id = Guid.NewGuid();
             DataCriacao = DateTime.Now;
             Excluido = false;
         }

@@ -6,7 +6,9 @@ using Auxiliar.Infra.CrossCutting.IoC;
 using Auxiliar.Infra.CrossCutting.Swagger.Providers;
 using ElmahCore.Mvc;
 using FluentValidation.AspNetCore;
+using HealthChecks.UI.Client;
 using MediatR;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -15,6 +17,7 @@ using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Globalization;
+using System.Reflection;
 
 namespace Auxiliar.Services.API
 {
@@ -35,10 +38,27 @@ namespace Auxiliar.Services.API
 
         #region Construtores Publicos
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
-            Environment = env;
+            IConfigurationBuilder _builder = new ConfigurationBuilder().SetBasePath(env.ContentRootPath)
+                                                                       .AddJsonFile(path: "appsettings.json",
+                                                                                    optional: true,
+                                                                                    reloadOnChange: true)
+                                                                       .AddJsonFile(path: $"appsettings.{env.EnvironmentName}.json",
+                                                                                    optional: true,
+                                                                                    reloadOnChange: true);
+
+            if (env.IsDevelopment())
+            {
+                Assembly _appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+
+                if (_appAssembly != null)
+                    _builder.AddUserSecrets(assembly: _appAssembly,
+                                            optional: true);
+            }
+
+            _builder.AddEnvironmentVariables();
+            Configuration = _builder.Build();
         }
 
         #endregion Construtores Publicos
@@ -47,8 +67,6 @@ namespace Auxiliar.Services.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add services to the container.
-
             //services.AddAutoMapperSetup();
             //services.AddCustomPolicyProviderConfiguration();
             //services.AddCustomAzureAdConfiguration();
@@ -95,6 +113,10 @@ namespace Auxiliar.Services.API
             services.AddSwaggerConfiguration();
             services.AddHttpContextAccessor();
 
+            services.AddHealthChecks()
+                    .AddSqlServer(Configuration["ConnectionStrings:AuxiliarContext"],
+                                  name: "Auxiliar database");
+
             services.AddMediatR(typeof(Startup));
             services.AddElmah(options => options.Path = ELMAH_BASE_PATH);
             RegisterServices(services);
@@ -128,6 +150,12 @@ namespace Auxiliar.Services.API
             app.UseRouting();
             app.UseAuthorization();
 
+            app.UseHealthChecksUI(option =>
+            {
+                option.AsideMenuOpened = true;
+                option.UIPath = "/status";
+            });
+
             app.UseWhen(context => context.Request.Path.StartsWithSegments(ELMAH_BASE_PATH, StringComparison.OrdinalIgnoreCase),
                appBuilder => appBuilder.Use(next =>
                {
@@ -143,6 +171,16 @@ namespace Auxiliar.Services.API
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/api/status", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecksUI(a =>
+                {
+                    a.UIPath = "/api/dashboard";
+                });
+
                 endpoints.MapControllers();
             });
         }
@@ -160,6 +198,8 @@ namespace Auxiliar.Services.API
         private void RegisterSettings(IServiceCollection services)
         {
             services.Configure<TokenConfigurationsSettings>(Configuration.GetSection(nameof(TokenConfigurationsSettings)));
+            services.Configure<ConnectionStrings>(Configuration.GetSection(nameof(ConnectionStrings)));
+            services.Configure<ApplicationSettings>(Configuration.GetSection(nameof(ApplicationSettings)));
         }
 
         private void DefinirCultureInfo()
