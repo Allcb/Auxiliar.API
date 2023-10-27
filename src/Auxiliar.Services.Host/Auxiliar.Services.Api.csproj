@@ -13,6 +13,7 @@
     <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="7.0.0" />
     <PackageReference Include="AspNetCore.HealthChecks.UI" Version="7.0.2" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="7.0.0" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.SqlServer.Storage" Version="7.0.0" />
     <PackageReference Include="ElmahCore" Version="2.1.2" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
@@ -32,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Auxiliar.Application\Auxiliar.Application.csproj" />
     <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.ExceptionHandler\Auxiliar.Infra.CrossCutting.ExceptionHandler.csproj" />
+    <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.HealthChecks\Auxiliar.Infra.CrossCutting.HealthChecks.csproj" />
     <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.IoC\Auxiliar.Infra.CrossCutting.IoC.csproj" />
     <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.Swagger\Auxiliar.Infra.CrossCutting.Swagger.csproj" />
     <ProjectReference Include="..\Auxiliar.Domain\Auxiliar.Domain.csproj" />
