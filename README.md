@@ -80,6 +80,11 @@ docker build -t nome-da-imagem
 docker run -d -p PORTA:PORTA nome-da-imagem
 ```
 
+## Rotas HealthCheck
+
+- `HttpPost {ambiente}/api/status` - Status.
+- `HttpPost {ambiente}/api/api/dashboard` - dashboard.
+
 Lembre-se de substituir `PORTA` pelo número da porta que você está usando em sua aplicação e `nome-da-imagem` pelo nome da imagem Docker que deseja atribuir.
 
 ## Contribuição
