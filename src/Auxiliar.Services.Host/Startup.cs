@@ -5,6 +5,7 @@ using Auxiliar.Infra.CrossCutting.ExceptionHandler.Providers;
 using Auxiliar.Infra.CrossCutting.HealthChecks.Providers;
 using Auxiliar.Infra.CrossCutting.IoC;
 using Auxiliar.Infra.CrossCutting.Swagger.Providers;
+using Auxiliar.Services.Api.Configurations;
 using ElmahCore.Mvc;
 using FluentValidation.AspNetCore;
 using HealthChecks.UI.Client;
@@ -68,11 +69,13 @@ namespace Auxiliar.Services.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddAutoMapperSetup();
+            // TODO
             //services.AddCustomPolicyProviderConfiguration();
             //services.AddCustomAzureAdConfiguration();
 
             DefinirCultureInfo();
+
+            services.AddAutoMapperSetup();
 
             services.AddHttpClient();
 
