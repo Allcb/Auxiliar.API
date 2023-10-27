@@ -82,6 +82,11 @@ docker run -d -p PORTA:PORTA nome-da-imagem
 
 Lembre-se de substituir `PORTA` pelo número da porta que você está usando em sua aplicação e `nome-da-imagem` pelo nome da imagem Docker que deseja atribuir.
 
+## Rotas HealthCheck
+
+- `HttpPost {ambiente}/api/status` - Status.
+- `HttpPost {ambiente}/api/api/dashboard` - dashboard.
+
 ## Contribuição
 
 Fique à vontade para contribuir para este projeto. Se você tiver ideias para novas ferramentas ou melhorias, sinta-se à vontade para abrir uma issue ou enviar um pull request.

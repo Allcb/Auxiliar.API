@@ -2,8 +2,10 @@
 using Auxiliar.Domain.Core.Settings;
 using Auxiliar.Domain.Core.Types;
 using Auxiliar.Infra.CrossCutting.ExceptionHandler.Providers;
+using Auxiliar.Infra.CrossCutting.HealthChecks.Providers;
 using Auxiliar.Infra.CrossCutting.IoC;
 using Auxiliar.Infra.CrossCutting.Swagger.Providers;
+using Auxiliar.Services.Api.Configurations;
 using ElmahCore.Mvc;
 using FluentValidation.AspNetCore;
 using HealthChecks.UI.Client;
@@ -67,11 +69,13 @@ namespace Auxiliar.Services.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddAutoMapperSetup();
+            // TODO
             //services.AddCustomPolicyProviderConfiguration();
             //services.AddCustomAzureAdConfiguration();
 
             DefinirCultureInfo();
+
+            services.AddAutoMapperSetup();
 
             services.AddHttpClient();
 
@@ -101,21 +105,30 @@ namespace Auxiliar.Services.API
                                             .Get<ApplicationSettings>()?.ApiVersion;
 
             services.AddApiVersioning(options =>
-             {
-                 options.ReportApiVersions = true;
-                 options.AssumeDefaultVersionWhenUnspecified = true;
-                 options.DefaultApiVersion = new ApiVersion(majorVersion: _apiVersion ?? 1,
-                                                            minorVersion: 0);
-                 options.UseApiBehavior = false;
-                 options.ErrorResponses = new ApiVersionExceptionHandler();
-             });
+            {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(majorVersion: _apiVersion ?? 1,
+                                                           minorVersion: 0);
+                options.UseApiBehavior = false;
+                options.ErrorResponses = new ApiVersionExceptionHandler();
+            });
 
             services.AddSwaggerConfiguration();
             services.AddHttpContextAccessor();
 
             services.AddHealthChecks()
                     .AddSqlServer(Configuration["ConnectionStrings:AuxiliarContext"],
-                                  name: "Auxiliar database");
+                                  name: "Auxiliar database")
+                    .AddCheck<CustomHealthChecks>("Diagnóstico");
+
+            services.AddHealthChecksUI(options =>
+            {
+                options.SetEvaluationTimeInSeconds(5);
+                options.MaximumHistoryEntriesPerEndpoint(10);
+                options.AddHealthCheckEndpoint("API com Health Checks", "/status");
+            })
+            .AddInMemoryStorage();
 
             services.AddMediatR(typeof(Startup));
             services.AddElmah(options => options.Path = ELMAH_BASE_PATH);
@@ -150,37 +163,34 @@ namespace Auxiliar.Services.API
             app.UseRouting();
             app.UseAuthorization();
 
+            app.UseHealthChecks("/status", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
             app.UseHealthChecksUI(option =>
             {
                 option.AsideMenuOpened = true;
-                option.UIPath = "/status";
+                option.UIPath = "/dashboard";
+                option.AddCustomStylesheet("Styles/healthChecksStyle.css");
             });
 
             app.UseWhen(context => context.Request.Path.StartsWithSegments(ELMAH_BASE_PATH, StringComparison.OrdinalIgnoreCase),
-               appBuilder => appBuilder.Use(next =>
-               {
-                   return async context =>
+                   appBuilder => appBuilder.Use(next =>
                    {
-                       context.Features.Get<IHttpBodyControlFeature>().AllowSynchronousIO = true;
+                       return async context =>
+                       {
+                           context.Features.Get<IHttpBodyControlFeature>().AllowSynchronousIO = true;
 
-                       await next(context);
-                   };
-               }));
+                           await next(context);
+                       };
+                   }));
 
             app.UseElmah();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecks("/api/status", new HealthCheckOptions
-                {
-                    Predicate = _ => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
-                endpoints.MapHealthChecksUI(a =>
-                {
-                    a.UIPath = "/api/dashboard";
-                });
-
                 endpoints.MapControllers();
             });
         }
