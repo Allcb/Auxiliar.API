@@ -1,6 +1,6 @@
 ﻿namespace Auxiliar.Domain.Core.Types
 {
-    public class ConnectionStrings
+    public class ConnectionStringsTypes
     {
         #region Propriedades Publicas
 

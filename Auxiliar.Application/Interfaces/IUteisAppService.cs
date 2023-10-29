@@ -10,6 +10,8 @@
 
         bool ValidarCnpj(string cnpj);
 
+        string GerarSenhaForte(int quantidadeCaracteres);
+
         #endregion Metodos Publicos
     }
 }

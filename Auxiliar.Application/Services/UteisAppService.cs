@@ -1,4 +1,7 @@
 ﻿using Auxiliar.Application.Interfaces;
+using Auxiliar.Domain.Core.Types;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Auxiliar.Application.Services
 {
@@ -40,6 +43,25 @@ namespace Auxiliar.Application.Services
             int[] _fatorMultiplicacao = new int[13] { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
 
             return ValidarDocumento(cnpj, _fatorMultiplicacao);
+        }
+
+        public string GerarSenhaForte(int quantidadeCaracteres = 12)
+        {
+            StringBuilder _senha = new StringBuilder(quantidadeCaracteres);
+
+            using (RandomNumberGenerator valorAleatorio = RandomNumberGenerator.Create())
+            {
+                byte[] _arrayByte = new byte[4];
+
+                for (int indice = 0; indice < quantidadeCaracteres; indice++)
+                {
+                    valorAleatorio.GetBytes(_arrayByte);
+
+                    _senha.Append(SenhaTypes.TODOS_CARACTERES[Convert.ToInt32(BitConverter.ToUInt32(_arrayByte, 0) % SenhaTypes.TODOS_CARACTERES.Length)]);
+                }
+            }
+
+            return _senha.ToString();
         }
 
         #endregion Metodos Publicos

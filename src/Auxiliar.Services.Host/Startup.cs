@@ -208,7 +208,7 @@ namespace Auxiliar.Services.API
         private void RegisterSettings(IServiceCollection services)
         {
             services.Configure<TokenConfigurationsSettings>(Configuration.GetSection(nameof(TokenConfigurationsSettings)));
-            services.Configure<ConnectionStrings>(Configuration.GetSection(nameof(ConnectionStrings)));
+            services.Configure<ConnectionStringsTypes>(Configuration.GetSection(nameof(ConnectionStringsTypes)));
             services.Configure<ApplicationSettings>(Configuration.GetSection(nameof(ApplicationSettings)));
         }
 

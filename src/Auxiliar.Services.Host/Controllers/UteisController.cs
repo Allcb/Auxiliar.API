@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Auxiliar.Services.Api.Controllers
 {
-    [Route("[controller]")]
+    [Authorize, Route("[controller]")]
     public class UteisController : ApiController
     {
         #region Campos Privados
@@ -36,7 +36,7 @@ namespace Auxiliar.Services.Api.Controllers
         /// </summary>
         /// <param name="quantidadeGuids">Quantidade de GUID's a ser gerada</param>
         /// <returns></returns>
-        [HttpPost("Guid")]
+        [AllowAnonymous, HttpPost("guid")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         [ProducesResponseType(typeof(IEnumerable<Guid>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
@@ -57,7 +57,7 @@ namespace Auxiliar.Services.Api.Controllers
         /// Gerar CPF fake.
         /// </summary>
         /// <returns></returns>
-        [HttpPost("gerar/Cpf")]
+        [AllowAnonymous, HttpPost("gerar/cpf")]
         [ProducesResponseType(typeof(string), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
         [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError)]
@@ -73,6 +73,7 @@ namespace Auxiliar.Services.Api.Controllers
         /// <param name="tipoDocumento">Selecione o tipo do documento (0 = CPF e 1 = CNPJ) </param>
         /// <returns></returns>
         [AllowAnonymous, HttpPost("validar/documento")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         [ProducesResponseType(typeof(bool), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
         [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError)]
@@ -92,6 +93,21 @@ namespace Auxiliar.Services.Api.Controllers
             };
 
             return Response(_documentoValidado);
+        }
+
+        /// <summary>
+        /// Gerar senha forte.
+        /// </summary>
+        /// <param name="quantidadeCaracteres">Quantidade de carecteres desejado para a senha a ser gerada</param>
+        /// <returns></returns>
+        [AllowAnonymous, HttpPost("gerar/Senha")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
+        [ProducesResponseType(typeof(IEnumerable<string>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError)]
+        public IActionResult GerarSenhaForte([FromQuery] int quantidadeCaracteres)
+        {
+            return Response(_uteisAppService.GerarSenhaForte(quantidadeCaracteres: quantidadeCaracteres));
         }
 
         #endregion POST
