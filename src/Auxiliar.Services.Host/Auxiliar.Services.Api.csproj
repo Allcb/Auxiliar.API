@@ -35,6 +35,7 @@
     <ProjectReference Include="..\..\Auxiliar.Application\Auxiliar.Application.csproj" />
     <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.ExceptionHandler\Auxiliar.Infra.CrossCutting.ExceptionHandler.csproj" />
     <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.HealthChecks\Auxiliar.Infra.CrossCutting.HealthChecks.csproj" />
+    <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.Helpers\Auxiliar.Infra.CrossCutting.Helpers.csproj" />
     <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.IoC\Auxiliar.Infra.CrossCutting.IoC.csproj" />
     <ProjectReference Include="..\..\Auxiliar.Infra.CrossCutting.Swagger\Auxiliar.Infra.CrossCutting.Swagger.csproj" />
     <ProjectReference Include="..\Auxiliar.Domain\Auxiliar.Domain.csproj" />

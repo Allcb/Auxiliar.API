@@ -2,9 +2,12 @@
 using Auxiliar.Domain.Core.Bus;
 using Auxiliar.Domain.Core.Enum;
 using Auxiliar.Domain.Core.Notifications;
+using Auxiliar.Infra.CrossCutting.ExceptionHandler.Extensions;
+using Auxiliar.Infra.CrossCutting.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Auxiliar.Services.Api.Controllers
 {
@@ -43,6 +46,10 @@ namespace Auxiliar.Services.Api.Controllers
         [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError)]
         public IActionResult GerarGuid([FromQuery] int quantidadeGuids)
         {
+            if (!ModelState.IsValid)
+                throw new ApiException(messages: ModelState.GetAllErrorsToString(),
+                                       httpStatusCode: HttpStatusCode.BadRequest);
+
             List<Guid> _guids = new();
 
             for (int itens = 0; itens < quantidadeGuids; itens++)
@@ -79,6 +86,10 @@ namespace Auxiliar.Services.Api.Controllers
         [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError)]
         public IActionResult Validar(TipoDocumentoEnum tipoDocumento, [FromBody] string documento)
         {
+            if (!ModelState.IsValid)
+                throw new ApiException(messages: ModelState.GetAllErrorsToString(),
+                                       httpStatusCode: HttpStatusCode.BadRequest);
+
             bool _documentoValidado;
 
             switch (tipoDocumento)
@@ -107,6 +118,10 @@ namespace Auxiliar.Services.Api.Controllers
         [ProducesResponseType(statusCode: StatusCodes.Status500InternalServerError)]
         public IActionResult GerarSenhaForte([FromQuery] int quantidadeCaracteres)
         {
+            if (!ModelState.IsValid)
+                throw new ApiException(messages: ModelState.GetAllErrorsToString(),
+                                       httpStatusCode: HttpStatusCode.BadRequest);
+
             return Response(_uteisAppService.GerarSenhaForte(quantidadeCaracteres: quantidadeCaracteres));
         }
 

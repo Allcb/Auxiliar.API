@@ -18,6 +18,7 @@
         public Guid Id { get; set; }
         public DateTime DataCriacao { get; set; }
         public DateTime? DataModificacao { get; set; }
+        public bool Ativo { get; set; }
         public bool Excluido { get; set; }
 
         #endregion Propriedades Publicas

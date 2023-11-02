@@ -1,9 +1,10 @@
 ﻿using Auxiliar.Domain.Core.Attributes;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Net;
 
-namespace Auxiliar.Infra.CrossCutting.Helpers.Helpers
+namespace Auxiliar.Infra.CrossCutting.Helpers
 {
     public static class ExtensionMethodHelpers
     {
@@ -101,6 +102,21 @@ namespace Auxiliar.Infra.CrossCutting.Helpers.Helpers
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 NullValueHandling = NullValueHandling.Ignore
             });
+        }
+
+        /// <summary>
+        /// Obter os erros do ModelState separados por ponto e virgula.
+        /// </summary>
+        /// <param name="modelState"></param>
+        /// <returns></returns>
+        public static string GetAllErrorsToString(this ModelStateDictionary modelState)
+        {
+            IEnumerable<string> _errors = modelState?.Values.SelectMany(x => x?.Errors)
+                            ?.Select(x => x?.ErrorMessage);
+
+            return _errors != null && _errors.Any()
+                        ? string.Join(" ", _errors)
+                        : "Verifique os dados inseridos.";
         }
 
         #endregion Metodos Publicos
