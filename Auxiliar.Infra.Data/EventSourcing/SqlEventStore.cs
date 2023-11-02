@@ -1,5 +1,5 @@
 ﻿using Auxiliar.Domain.Core.Events;
-using Auxiliar.Infra.CrossCutting.Helpers.Helpers;
+using Auxiliar.Infra.CrossCutting.Helpers;
 
 namespace Auxiliar.Infra.Data.EventSourcing
 {
