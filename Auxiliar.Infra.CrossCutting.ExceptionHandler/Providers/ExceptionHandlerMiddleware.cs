@@ -1,7 +1,7 @@
 ﻿using Auxiliar.Domain.Core.DTO;
 using Auxiliar.Domain.Core.Enum;
 using Auxiliar.Infra.CrossCutting.ExceptionHandler.Extensions;
-using Auxiliar.Infra.CrossCutting.Helpers.Helpers;
+using Auxiliar.Infra.CrossCutting.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;

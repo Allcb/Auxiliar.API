@@ -1,5 +1,5 @@
 ﻿using Auxiliar.Domain.Core.Enum;
-using Auxiliar.Infra.CrossCutting.Helpers.Helpers;
+using Auxiliar.Infra.CrossCutting.Helpers;
 using System.Net;
 
 namespace Auxiliar.Infra.CrossCutting.ExceptionHandler.Extensions

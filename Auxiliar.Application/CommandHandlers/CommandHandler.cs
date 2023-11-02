@@ -5,7 +5,7 @@ using Auxiliar.Domain.Core.Events;
 using Auxiliar.Domain.Core.Extensions;
 using Auxiliar.Domain.Core.Notifications;
 using Auxiliar.Domain.Interfaces.UoW;
-using Auxiliar.Infra.CrossCutting.Helpers.Helpers;
+using Auxiliar.Infra.CrossCutting.Helpers;
 using FluentValidation.Results;
 using MediatR;
 
